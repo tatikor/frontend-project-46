@@ -3,7 +3,8 @@ import { program } from 'commander';
 import fs from 'fs';
 import _ from 'lodash';
 import path from 'path';
-
+import compareObjects from './compare-objects.js'
+import generateDiffTree from './generateDiff.js'
 
 program
   .name('gendiff')
@@ -20,14 +21,11 @@ program
     const genDiff = (file1, file2) => {
       const file1Parsed = JSON.parse(fs.readFileSync(getAbsolutePath(file1)));
       const file2Parsed = JSON.parse(fs.readFileSync(getAbsolutePath(file2)));
-
-      return { file1Parsed, file2Parsed };
-
+    return compareObjects(file1Parsed, file2Parsed); 
     }
-  console.log(genDiff(file1, file2));
-
+    console.log(generateDiffTree(genDiff(file1, file2)));
   });
-
+  
   program.parse(process.argv);
 
   if (process.argv.includes('-h') || process.argv.includes('--help')) {
